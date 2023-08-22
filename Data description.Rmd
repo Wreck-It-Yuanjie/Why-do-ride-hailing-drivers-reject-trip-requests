@@ -1,0 +1,211 @@
+---
+title: "Ride-hailing driver study data descriptions"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# UNDERSTANDING THE IMPACT OF A PANDEMIC ON PUBLIC TRANSIT USE PATTERNS
+
+## import libraries
+```{r echo = TRUE}
+library(MASS)
+library(ggplot2)
+library(psych)
+library(dplyr)
+library(car)
+library(tidyverse)
+library(ggpubr)
+library(tidyr)
+library(gridExtra)
+```
+
+## set working space & Read the file
+```{r}
+setwd("/Users/tuyuanjie/Documents/2021Summer/Driverdata")
+
+WideData <- read.csv("widedata1.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
+
+```
+
+## Quality check
+```{R}
+## attention check
+WideData <- filter(WideData, ATTENTION == "N4")
+
+## hhincome >= individual income
+WideData <- filter(WideData, HHINCOME >= INDVINCOME)
+```
+
+## Data wrangling
+```{R}
+## only choose respondents from the airport
+WideData <- filter(WideData, SOURCE == 3)
+
+## filter out respondents who do not want to give the number (in the survey  < 18)
+WideData <- filter(WideData, AGE >= 18)
+
+## filter out respondents who do not want to give the number (in the survey recorded as 10)
+WideData <- filter(WideData, INDVINCOME < 10)
+
+WideData <- WideData[complete.cases(WideData$WKHOURS.YN),]
+
+## Age ==> categorical
+WideData <- WideData %>% mutate(AGE = ifelse(AGE >= 65, 2,
+                                              ifelse(AGE >= 40, 1, 0)))
+
+## Education ==> categorical
+WideData <- WideData %>% mutate(EDU = ifelse(EDU == 1, 0,
+                                             ifelse(EDU == 2, 1,
+                                                ifelse(EDU %in% c(3,4,5,8), 2, 3))))
+
+## Ridehailing company
+WideData$COMP_Uber[is.na(WideData$COMP_Uber)] <- 0
+WideData$COMP_Lyft[is.na(WideData$COMP_Lyft)] <- 0
+
+
+## Income ==> dummy
+WideData <- WideData %>% mutate(POVERTY = ifelse(HHINCOME < 9, 0,1))
+
+## Employment status ==> categorical
+WideData$EMPL <- WideData$EMPL - 1
+
+## filter out non-binary gender since too few
+WideData <- filter(WideData, GENDER != 2)
+
+## filter out people who choose "prefer not to answer"
+WideData <- filter(WideData, EMPL %in% c(0,1,2))
+
+## filter out people who completed no trips last week
+WideData <- filter(WideData, WEEK.TRIPS!=0)
+
+## calculate trip rejection rate
+WideData$rjrate <- WideData$WEEK.TRIPS.RJ/(WideData$WEEK.TRIPS + WideData$WEEK.TRIPS.RJ)*100
+
+## make ID categorical
+WideData$ID <- as.numeric(as.factor(WideData$USERID))
+
+WideData <- WideData %>% mutate(COMP = ifelse(COMP_Uber == 1 & COMP_Lyft == 0, 0,
+                                             ifelse(COMP_Uber == 0 & COMP_Lyft == 1, 1, 2)))
+
+WideData$WKHOURS[WideData$WKHOURS == ""] <- 0
+
+WideData$TGINCOME[is.na(WideData$TGINCOME)] <- 0
+
+WideData$TGINCOME[is.na(WideData$TGINCOME)] <- 0
+
+```
+
+## Variable description
+```{R}
+describe(WideData)
+```
+
+
+## target daily earnings
+```{R fig, fig.height = 1.8, fig.width = 4.5}
+## Describe target income
+t1 <- filter(WideData, TGINCOME.YN == 1)
+DESP_TGINCOME <- describe(t1$TGINCOME)
+
+WideData$TGINCOME.YN <- as.factor(WideData$TGINCOME.YN)
+
+s0 <- ggplot(data=WideData, aes(TGINCOME.YN)) + 
+  geom_bar(fill="#4b2e83", color="#4b2e83", alpha=0.65, width = 0.3) + 
+  xlab("Do you usually try to earn a certain amount of money per day?") + 
+  ylab("Count") + 
+  theme_bw()
+
+s1 <- ggplot(data=t1, aes(TGINCOME)) + 
+  geom_histogram(fill="#4b2e83", color="#4b2e83", alpha=0.65, binwidth = 50) + 
+  geom_vline(xintercept = DESP_TGINCOME$mean, color = "red", alpha = 0.75) + 
+  geom_text(aes(x=265, label="Mean = 222", y=44), colour="#4b2e83", alpha = 0.8) + 
+  ylim(0, 45) + 
+  xlab("How much do you usually try to earn per day? ($)") + 
+  ylab("Count") + 
+  theme_bw()
+
+grid.arrange(s0, s1, nrow =1)
+```
+## target working hours
+```{R fig, fig.height = 1.8, fig.width = 4.5}
+## Describe target income
+WideData$WKHOURS <- as.numeric(WideData$WKHOURS)
+t0 <- filter(WideData, WKHOURS.YN == 1)
+
+DESP_WKHOURS <- describe(t0$WKHOURS)
+
+WideData$WKHOURS.YN <- as.factor(WideData$WKHOURS.YN)
+
+s7 <- ggplot(data=WideData, aes(WKHOURS.YN)) + 
+  geom_bar(fill="#4b2e83", color="#4b2e83", alpha=0.65, width = 0.3) + 
+  xlab("Do you usually try to work a certain number of hours per day?") + 
+  ylab("Count") + 
+  theme_bw()
+
+s8 <- ggplot(data=t0, aes(WKHOURS)) + 
+  geom_histogram(fill="#4b2e83", color="#4b2e83", alpha=0.65, binwidth = 2) + 
+  geom_vline(xintercept = DESP_WKHOURS$mean, color = "red", alpha = 0.75) + 
+  geom_text(aes(x=10.5, label="Mean = 9.22", y=54), colour="#4b2e83", alpha = 0.8) + 
+  ylim(0, 55) + 
+  xlab("How many hours do you usually try to work per day? (h)") + 
+  ylab("Count") + 
+  theme_bw()
+
+grid.arrange(s7, s8, nrow =1)
+```
+## start times
+```{R fig, fig.height = 1.8, fig.width = 4.5}
+## Describe start times
+t2 <- filter(WideData, STARTTIME.YN == 1)
+DESP1 <- describe(t2$STARTTIME)
+
+WideData$STARTTIME.YN <- as.factor(WideData$STARTTIME.YN)
+
+s3 <- ggplot(data=WideData, aes(STARTTIME.YN)) + 
+  geom_bar(fill="#4b2e83", color="#4b2e83", alpha=0.65, width = 0.3) + 
+  xlab("Do you start driving at around the same time every day?") + 
+  ylab("Count") + 
+  theme_bw()
+
+s4 <- ggplot(data=t2, aes(STARTTIME)) + 
+  geom_histogram(fill="#4b2e83", color="#4b2e83", alpha=0.65, binwidth = 2) + 
+  geom_vline(xintercept = DESP1$mean, color = "red", alpha = 0.75) + 
+  geom_text(aes(x=11.5, label="Mean = 9.29", y=23), colour="#4b2e83", alpha = 0.8) + 
+  ylim(0, 24) + 
+  xlab("When do you start driving every day? (h)") + 
+  ylab("Count") + 
+  theme_bw()
+
+grid.arrange(s3, s4, nrow =1)
+```
+## stop times
+```{R fig, fig.height = 1.8, fig.width = 4.5}
+## Describe stop times
+t3 <- filter(WideData, STOPTIME.YN == 1)
+DESP2 <- describe(t3$STOPTIME)
+
+WideData$STOPTIME.YN <- as.factor(WideData$STOPTIME.YN)
+
+s5 <- ggplot(data=WideData, aes(STOPTIME.YN)) + 
+  geom_bar(fill="#4b2e83", color="#4b2e83", alpha=0.65, width = 0.3) + 
+  xlab("Do you stop driving at around the same time every day?") + 
+  ylab("Count") + 
+  theme_bw()
+
+s6 <- ggplot(data=t3, aes(STOPTIME)) + 
+  geom_histogram(fill="#4b2e83", color="#4b2e83", alpha=0.65, binwidth = 3) + 
+  geom_vline(xintercept = DESP2$mean, color = "red", alpha = 0.75) + 
+  geom_text(aes(x=11.5, label="Mean = 15.46", y=23), colour="#4b2e83", alpha = 0.8) + 
+  ##ylim(0, 24) + 
+  xlab("When do you stop driving every day? (h)") + 
+  ylab("Count") + 
+  theme_bw()
+
+grid.arrange(s5, s6, nrow =1)
+```
+

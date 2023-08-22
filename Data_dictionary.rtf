@@ -1,0 +1,549 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww12080\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 ###########################################\
+#\
+# @ file: Data dictionary for ridehailingdriversurvey\
+# @ author: Yuanjie Tu, Morin Khaloei, University of Washington\
+# @ date: Sun Sep 4 2021\
+\
+USERID: User ID\
+\
+COMP_Uber: Which ride-sharing companies are you driving for? Uber\
+0: No\
+1: Yes\
+\
+COMP_Lyft: Which ride-sharing companies are you driving for? Lyft\
+0: No\
+1: Yes\
+\
+WKYEARS: How long have you been an active ride-sharing driver?\
+0: Less than 6 months\
+1: 6 months - less than 1 year\
+2: 1 year - less than 1.5 years\
+3: 1.5 years - less than 2 years\
+4: 2 years or more\
+\
+COVID: Do you work as a ride-sharing driver during COVID-19 pandemic?\
+0: No, I stopped working during the pandemic, and I am not working now\
+1: Yes, I work during the pandemic\
+2: I stopped working at the beginning, but start working again after getting vaccinated\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 STARTTIME.YN: Do you start driving at around the same time every day?\
+0: No\
+1: Yes\
+\
+STARTTIME: When do you start driving every day?\
+\
+STOPTIME.YN: Do you stop driving at around the same time every day?\
+\
+STOPTIME: When do you stop driving every day?\
+\
+WKHOURS.YN: Do you usually try to work a certain number of hours per day?\
+\
+WKHOURS: How many hours do you usually try to work per day?\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 TGINCOME.YN: Do you usually try to earn a certain amount of money per day?\
+\
+TGINCOME: How much do you usually try to earn per day?\
+\
+WEEK.TRIPS: How many trip did you get last week?\
+\
+WEEK.TRIPS.RJ: How many did you reject last week?\
+\
+RESP.1: Will you accept or reject the trip for the first scenario?\
+\
+RESP.1.SURGE: Surge price of the trip for the first scenario\
+\
+RESP.1.WTTIME: Expected waiting time until next request (if you decline) for the first scenario\
+\
+RESP.1.RLTIME: Driving time to passenger's location for the first scenario\
+\
+RESP.1.LTRIP: Long trip (over 45 minutes) for the first scenario?\
+0: No\
+1: Yes\
+\
+RESP.1.PR: Passenger rating for the first scenario\
+\
+RESP.1.SHARED: Solo or Shared/Pooled for the first scenario?\
+0: Solo\
+1: Pooled/shared\
+\
+RESP.2: Will you accept or reject the trip for the first scenario?\
+\
+RESP.2.SURGE: Surge price of the trip for the first scenario\
+\
+RESP.2.WTTIME: Expected waiting time until next request (if you decline) for the first scenario\
+\
+RESP.2.RLTIME: Driving time to passenger's location for the first scenario\
+\
+RESP.2.LTRIP: Long trip (over 45 minutes) for the first scenario?\
+0: No\
+1: Yes\
+\
+RESP.2.PR: Passenger rating for the second scenario\
+\
+RESP.2.SHARED: Solo or Shared/Pooled for the second scenario\
+0: Solo\
+1: Pooled/shared\
+\
+RESP.3: Will you accept or reject the trip for the third scenario?\
+\
+RESP.3.SURGE: Surge price of the trip for the third scenario\
+\
+RESP.3.WTTIME: Expected waiting time until next request (if you decline) for the third scenario\
+\
+RESP.3.RLTIME: Driving time to passenger's location for the third scenario\
+\
+RESP.3.LTRIP: Long trip (over 45 minutes) for the third scenario?\
+0: No\
+1: Yes\
+\
+RESP.3.PR: Passenger rating for the third scenario\
+\
+RESP.3.SHARED: Solo or Shared/Pooled for the third scenario?\
+0: Solo\
+1: Pooled/shared\
+\
+RESP.4: Will you accept or reject the trip for the fourth scenario?\
+\
+RESP.4.SURGE: Surge price of the trip for the fourth scenario\
+\
+RESP.4.WTTIME: Expected waiting time until next request (if you decline) for the fourth scenario\
+\
+RESP.4.RLTIME: Driving time to passenger's location for the fourth scenario\
+\
+RESP.4.LTRIP: Long trip (over 45 minutes) for the fourth scenario?\
+0: No\
+1: Yes\
+\
+RESP.4.PR: Passenger rating for the fourth scenario\
+\
+RESP.4.SHARED: Solo or Shared/Pooled for the fourth scenario?\
+0: Solo\
+1: Pooled/shared\
+\
+RESP.5: Will you accept or reject the trip for the fifth scenario?\
+\
+RESP.5.SURGE: Surge price of the trip the trip for the fifth scenario\
+\
+RESP.5.WTTIME: Expected waiting time until next request (if you decline) for the fifth scenario\
+\
+RESP.5.RLTIME: Driving time to passenger's location  for the fifth scenario\
+\
+RESP.5.LTRIP: Long trip (over 45 minutes) for the fifth scenario?\
+0: No\
+1: Yes\
+\
+RESP.5.PR: Passenger rating for the fifth scenario\
+\
+RESP.5.SHARED: Solo or Shared/Pooled for the fifth scenario?\
+0: Solo\
+1: Pooled/shared\
+\
+RESP.6: Will you accept or reject the trip for the sixth scenario?\
+\
+RESP.6.SURGE: Surge price of the trip for the sixth scenario\
+\
+RESP.6.WTTIME: Expected waiting time until next request (if you decline) for the sixth scenario\
+\
+RESP.6.RLTIME: Driving time to passenger's location for the sixth scenario\
+\
+RESP.6.LTRIP: Long trip (over 45 minutes) for the sixth scenario?\
+0: No\
+1: Yes\
+\
+RESP.6.PR: Passenger rating for the sixth scenario\
+\
+RESP.6.SHARED: Solo or Shared/Pooled for the sixth scenario?\
+0: Solo\
+1: Pooled/shared\
+\
+WT.1: Will you continue working now for the first scenario?\
+1: Yes\
+2: No\
+\
+RL.1: Where would you like to go for the first scenario?\
+3: stay at the same place\
+1, 2, 4, 5: nearby neighborhoods\
+\
+WTRL.1.INCOME: accumulated income today for the first scenario\
+\
+WTRL.1.HOURS: accumulated working hours today for the first scenario\
+\
+WTRL.1.SURGE.N3: Surge price in neighborhood 3 (the neighborhood where the respondent is) for the first scenario\
+\
+WTRL.1.WTTIME.N3: Expected waiting time until next request in neighborhood 3 (the neighborhood where the respondent is) for the first scenario\
+\
+WTRL.1.SURGE.N1: Surge price in neighborhood 1 for the first scenario\
+\
+WTRL.1.SURGE.N2: Surge price in neighborhood 2 for the first scenario\
+\
+WTRL.1.SURGE.N4: Surge price in neighborhood 4 for the first scenario\
+\
+WTRL.1.SURGE.N5: Surge price in neighborhood 5 for the first scenario\
+\
+WTRL.1.WTTIME.N1: Expected waiting time until next request in neighborhood 1 for the first scenario\
+\
+WTRL.1.WTTIME.N2: Expected waiting time until next request in neighborhood 2 for the first scenario\
+\
+WTRL.1.WTTIME.N4: Expected waiting time until next request in neighborhood 4 for the first scenario\
+\
+WTRL.1.WTTIME.N5: Expected waiting time until next request in neighborhood 5 for the first scenario\
+\
+WTRL.1.RTTIME.N1: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 1 for the first scenario\
+\
+WTRL.1.RTTIME.N2: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 2 for the first scenario\
+\
+WTRL.1.RTTIME.N4: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 4 for the first scenario\
+\
+WTRL.1.RTTIME.N5: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 5 for the first scenario\
+\
+WT.2: Will you continue working now for the second scenario?\
+1: Yes\
+2: No\
+\
+RL.2: Where would you like to go for the second scenario?\
+3: stay at the same place\
+1, 2, 4, 5: nearby neighborhoods\
+\
+WTRL.2.INCOME: accumulated income today for the second scenario\
+\
+WTRL.2.HOURS: accumulated working hours today for the second scenario\
+\
+WTRL.2.SURGE.N3: Surge price in neighborhood 1 for the second scenario\
+\
+WTRL.2.WTTIME.N3: Expected waiting time until next request in neighborhood 3 for the second scenario\
+\
+WTRL.2.SURGE.N1: Surge price in neighborhood 1 for the second scenario\
+\
+WTRL.2.SURGE.N2: Surge price in neighborhood 2 for the second scenario\
+\
+WTRL.2.SURGE.N4: Surge price in neighborhood 4 for the second scenario\
+\
+WTRL.2.SURGE.N5: Surge price in neighborhood 5 for the second scenario\
+\
+WTRL.2.WTTIME.N1: Expected waiting time until next request in neighborhood 1 for the second scenario\
+\
+WTRL.2.WTTIME.N2: Expected waiting time until next request in neighborhood 2 for the second scenario\
+\
+WTRL.2.WTTIME.N4: Expected waiting time until next request in neighborhood 4 for the second scenario\
+\
+WTRL.2.WTTIME.N5: Expected waiting time until next request in neighborhood 5 for the second scenario\
+\
+WTRL.2.RTTIME.N1: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 1 for the second scenario\
+\
+WTRL.2.RTTIME.N2: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 2 for the second scenario\
+\
+WTRL.2.RTTIME.N4: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 4 for the second scenario\
+\
+WTRL.2.RTTIME.N5: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 5 for the second scenario\
+\
+WT.3: Will you continue working now for the third scenario?\
+1: Yes\
+2: No\
+\
+RL.3: Where would you like to go for the third scenario?\
+3: stay at the same place\
+1, 2, 4, 5: nearby neighborhoods\
+\
+WTRL.3.INCOME: accumulated income today for the third scenario\
+\
+WTRL.3.HOURS: accumulated working hours today for the third scenario\
+\
+WTRL.3.SURGE.N3: Surge price in neighborhood 1 for the third scenario\
+\
+WTRL.3.WTTIME.N3: Expected waiting time until next request in neighborhood 3 for the third scenario\
+\
+WTRL.3.SURGE.N1: Surge price in neighborhood 1 for the third scenario\
+\
+WTRL.3.SURGE.N2: Surge price in neighborhood 2 for the third scenario\
+\
+WTRL.3.SURGE.N4: Surge price in neighborhood 4 for the third scenario\
+\
+WTRL.3.SURGE.N5: Surge price in neighborhood 5 for the third scenario\
+\
+WTRL.3.WTTIME.N1: Expected waiting time until next request in neighborhood 1 for the third scenario\
+\
+WTRL.3.WTTIME.N2: Expected waiting time until next request in neighborhood 2 for the third scenario\
+\
+WTRL.3.WTTIME.N4: Expected waiting time until next request in neighborhood 4 for the third scenario\
+\
+WTRL.3.WTTIME.N5: Expected waiting time until next request in neighborhood 5 for the third scenario\
+\
+WTRL.3.RTTIME.N1: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 1 for the third scenario\
+\
+WTRL.3.RTTIME.N2: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 2 for the third scenario\
+\
+WTRL.3.RTTIME.N4: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 4 for the third scenario\
+\
+WTRL.3.RTTIME.N5: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 5 for the third scenario\
+\
+WT.4: Will you continue working now for the fourth scenario?\
+1: Yes\
+2: No\
+\
+RL.4: Where would you like to go for the fourth scenario?\
+3: stay at the same place\
+1, 2, 4, 5: nearby neighborhoods\
+\
+WTRL.4.INCOME: accumulated income today for the fourth scenario\
+\
+WTRL.4.HOURS: accumulated working hours today for the fourth scenario\
+\
+WTRL.4.SURGE.N3: Surge price in neighborhood 3 for the fourth scenario\
+\
+WTRL.4.WTTIME.N3: Expected waiting time until next request in neighborhood 3 for the fourth scenario\
+\
+WTRL.4.SURGE.N1: Surge price in neighborhood 1 for the fourth scenario\
+\
+WTRL.4.SURGE.N2: Surge price in neighborhood 2 for the fourth scenario\
+\
+WTRL.4.SURGE.N4: Surge price in neighborhood 4 for the fourth scenario\
+\
+WTRL.4.SURGE.N5: Surge price in neighborhood 5 for the fourth scenario\
+\
+WTRL.4.WTTIME.N1: Expected waiting time until next request in neighborhood 1 for the fourth scenario\
+\
+WTRL.4.WTTIME.N2: Expected waiting time until next request in neighborhood 2 for the fourth scenario\
+\
+WTRL.4.WTTIME.N4: Expected waiting time until next request in neighborhood 4 for the fourth scenario\
+\
+WTRL.4.WTTIME.N5: Expected waiting time until next request in neighborhood 5 for the fourth scenario\
+\
+WTRL.4.RTTIME.N1: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 1 for the fourth scenario\
+\
+WTRL.4.RTTIME.N2: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 2 for the fourth scenario\
+\
+WTRL.4.RTTIME.N4: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 4 for the fourth scenario\
+\
+WTRL.4.RTTIME.N5: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 5 for the fourth scenario\
+\
+WT.5: Will you continue working now for the fifth scenario?\
+1: Yes\
+2: No\
+\
+RL.5: Where would you like to go for the fifth scenario?\
+3: stay at the same place\
+1, 2, 4, 5: nearby neighborhoods\
+\
+WTRL.5.INCOME: accumulated income today for the fifth scenario\
+\
+WTRL.5.HOURS: accumulated working hours today for the fifth scenario\
+\
+WTRL.5.SURGE.N3: Surge price in neighborhood 3 for the fifth scenario\
+\
+WTRL.5.WTTIME.N3: Expected waiting time until next request in neighborhood 3 for the fifth scenario\
+\
+WTRL.5.SURGE.N1: Surge price in neighborhood 1 for the fifth scenario\
+\
+WTRL.5.SURGE.N2: Surge price in neighborhood 2 for the fifth scenario\
+\
+WTRL.5.SURGE.N4: Surge price in neighborhood 4 for the fifth scenario\
+\
+WTRL.5.SURGE.N5: Surge price in neighborhood 5 for the fifth scenario\
+\
+WTRL.5.WTTIME.N1: Expected waiting time until next request in neighborhood 1 for the fifth scenario\
+\
+WTRL.5.WTTIME.N2: Expected waiting time until next request in neighborhood 2 for the fifth scenario\
+\
+WTRL.5.WTTIME.N4: Expected waiting time until next request in neighborhood 4 for the fifth scenario\
+\
+WTRL.5.WTTIME.N5: Expected waiting time until next request in neighborhood 5 for the fifth scenario\
+\
+WTRL.5.RTTIME.N1: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 1 for the fifth scenario\
+\
+WTRL.5.RTTIME.N2: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 2 for the fifth scenario\
+\
+WTRL.5.RTTIME.N4: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 4 for the fifth scenario\
+\
+WTRL.5.RTTIME.N5: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 5 for the fifth scenario\
+\
+WT.6: Will you continue working now for the sixth scenario?\
+1: Yes\
+2: No\
+\
+RL.6: Where would you like to go for the sixth scenario?\
+3: stay at the same place\
+1, 2, 4, 5: nearby neighborhoods\
+\
+WTRL.6.INCOME: accumulated income today for the sixth scenario\
+\
+WTRL.6.HOURS: accumulated working hours today for the sixth scenario\
+\
+WTRL.6.SURGE.N3: Surge price in neighborhood 3 for the sixth scenario\
+\
+WTRL.6.WTTIME.N3: Expected waiting time until next request in neighborhood 3 for the sixth scenario\
+\
+WTRL.6.SURGE.N1: Surge price in neighborhood 1 for the sixth scenario\
+\
+WTRL.6.SURGE.N2: Surge price in neighborhood 2 for the sixth scenario\
+\
+WTRL.6.SURGE.N4: Surge price in neighborhood 4 for the sixth scenario\
+\
+WTRL.6.SURGE.N5: Surge price in neighborhood 5 for the sixth scenario\
+\
+WTRL.6.WTTIME.N1: Expected waiting time until next request in neighborhood 1 for the sixth scenario\
+\
+WTRL.6.WTTIME.N2: Expected waiting time until next request in neighborhood 2 for the sixth scenario\
+\
+WTRL.6.WTTIME.N4: Expected waiting time until next request in neighborhood 4 for the sixth scenario\
+\
+WTRL.6.WTTIME.N5: Expected waiting time until next request in neighborhood 5 for the sixth scenario\
+\
+WTRL.6.RTTIME.N1: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 1 for the sixth scenario\
+\
+WTRL.6.RTTIME.N2: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 2 for the sixth scenario\
+\
+WTRL.6.RTTIME.N4: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 4 for the sixth scenario\
+\
+WTRL.6.RTTIME.N5: Travel time from neighborhood 3 (the neighborhood where the respondent is) to neighborhood 5 for the sixth scenario\
+\
+AGE: what is your age?\
+\
+GENDER: \
+0: Male\
+1: Female\
+2: Prefer not to answer\
+\
+HISPANIC\
+0: No, not Hispanic origin\
+1: Yes, Hispanic origin\
+2: Prefer not to answer\
+\
+RACE\
+1: White\
+2: Black or African American\
+3: American Indian or Alaska Native\
+4: Asian\
+5: Native Hawaiian or other Pacific Islanders\
+6: Another\
+7: Prefer not to answer\
+\
+IMMG: Were you born in the US?\
+0: Yes, born in US\
+1: No, not born in US\
+\
+EDU: What is the highest degree or level of school you have completed?\
+1: Less than high school\
+2: High school graduate or GED\
+3: Some college/technical school training\
+4: 2-Year college degree (Associate)\
+5: 4-Year college degree (BA, BS)\
+6: Master\'92s degree\
+7: Doctoral degree\
+8: Professional degree (MD, JD)\
+\
+STDT: are you currently a student?\
+0: No, not a student\
+1: Yes, part-time student (fewer than 35 hours/week)\
+2: Yes, full-time student (35+ hours/week)\
+\
+EMPL: Do you have another job besides ride-sharing driver?\
+1: Yes, employed, full-time (35+ hours/week)\
+2: Yes, employed, part-time (Fewer than 35 hours/week)\
+3: No, I don\'92t have another job\
+4: Another\
+\
+ZIPCODE: What is the zip code where you currently live?\
+\
+HHSIZE: How many people live in your household including yourself?\
+\
+CHILD: Of these, how many are children under the age of 18?\
+\
+HHINCOME: Which category best describes your household income  before taxes from the last calendar year? Your household includes yourself, people living with you and sharing income with you (e.g. spouse, partner, or dependents).\
+1: "Less than $10,000"\
+2: "$10,000 to $14,999"\
+3: "$15,000 to $19,999"\
+4: "$20,000 to $24,999"\
+5: "$25,000 to $34,999"\
+6: "$35,000 to $49,999"\
+7: "$50,000 to $74,999"\
+8: "$75,000 to $99,999"\
+9: "$100,000 to $199,999"\
+10: "$200,000 to $249,999"\
+11: "$250,000 or more"\
+\
+INDVINCOME: Which category best describes your individual income before taxes from the last calendar year?\
+1: "Less than $10,000"\
+2: "$10,000 to $14,999"\
+3: "$15,000 to $19,999"\
+4: "$20,000 to $24,999"\
+5: "$25,000 to $34,999"\
+6: "$35,000 to $49,999"\
+7: "$50,000 to $74,999"\
+8: "$75,000 to $99,999"\
+9: "$100,000 to $199,999"\
+10: "$200,000 to $249,999"\
+11: "$250,000 or more"\
+\
+HEALTH: What is your health status?\
+1: Very good\
+2: Good\
+3: Fair\
+4: Poor\
+5: Very poor\
+6: I don\'92t know\
+7: Prefer not to answer\
+\
+SOURCE: How did you hear about this survey?\
+1: Facebook Ad\
+2: Text messages\
+3: Airport\
+4: Email\
+5: During a ride\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 \
+\
+}

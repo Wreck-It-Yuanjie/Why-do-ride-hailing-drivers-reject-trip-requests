@@ -1,0 +1,355 @@
+---
+title: "Ride-hailing driver study"
+author: "Tukey Tu"
+date: "10/4/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# UNDERSTANDING THE IMPACT OF A PANDEMIC ON PUBLIC TRANSIT USE PATTERNS
+
+## import libraries
+```{r echo = TRUE}
+library(MASS)
+library(lme4)
+library(ggplot2)
+library(psych)
+library(dplyr)
+library(MRCE)
+library(car)
+library(tidyverse)
+library(ggpubr)
+library(compare)
+library(tibble)
+library(tidyr)
+library(gridExtra)
+library(MASS)
+library(Rmisc)
+library(mgcv)
+```
+
+## set working space & Read the file
+```{r}
+setwd("/Users/tuyuanjie/Documents/2021Summer/Driverdata")
+
+WideData <- read.csv("widedata.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
+
+```
+
+## Quality check
+```{R}
+## attention check
+WideData <- filter(WideData, ATTENTION == "N4")
+
+## hhincome >= individual income
+WideData <- filter(WideData, HHINCOME >= INDVINCOME)
+```
+
+## Data wrangling
+```{R}
+## only choose respondents from the airport
+WideData <- filter(WideData, SOURCE == 3)
+
+## filter out respondents who do not want to give the number (in the survey  < 18)
+WideData <- filter(WideData, AGE >= 18)
+
+## filter out respondents who do not want to give the number (in the survey recorded as 10)
+WideData <- filter(WideData, INDVINCOME < 10)
+
+## Age ==> categorical
+WideData <- WideData %>% mutate(AGE = ifelse(AGE >= 65, 2,
+                                              ifelse(AGE >= 40, 1, 0)))
+
+## Education ==> categorical
+WideData <- WideData %>% mutate(EDU = ifelse(EDU == 1, 0,
+                                             ifelse(EDU == 2, 1,
+                                                ifelse(EDU %in% c(3,4,5,8), 2, 3))))
+
+## Ridehailing company
+WideData$COMP_Uber[is.na(WideData$COMP_Uber)] <- 0
+WideData$COMP_Lyft[is.na(WideData$COMP_Lyft)] <- 0
+
+
+## Income ==> dummy
+WideData <- WideData %>% mutate(POVERTY = ifelse(HHINCOME < 9, 0,1))
+
+## Employment status ==> categorical
+WideData$EMPL <- WideData$EMPL - 1
+
+## filter out non-binary gender since too few
+WideData <- filter(WideData, GENDER != 2)
+
+## filter out people who choose "prefer not to answer"
+WideData <- filter(WideData, EMPL %in% c(0,1,2))
+
+## filter out people who completed no trips last week
+WideData <- filter(WideData, WEEK.TRIPS!=0)
+
+## calculate trip rejection rate
+WideData$rjrate <- WideData$WEEK.TRIPS.RJ/(WideData$WEEK.TRIPS + WideData$WEEK.TRIPS.RJ)*100
+
+## make ID categorical
+WideData$ID <- as.numeric(as.factor(WideData$USERID))
+
+```
+
+## Wide to long: RESP
+```{R}
+obs1 <- WideData[,c("ID", "AGE", "COMP_Uber", "COMP_Lyft", "WEEK.TRIPS", "WEEK.TRIPS.RJ", "GENDER", "HISPANIC", "RACE", "IMMG", "EDU", "STDT", "EMPL", "HHSIZE", "CHILD", "POVERTY", "HHINCOME", "INDVINCOME", "SOURCE", "RESP.1", "RESP.1.SURGE", "RESP.1.WTTIME", "RESP.1.RLTIME", "RESP.1.LTRIP", "RESP.1.PR", "RESP.1.SHARED", "rjrate")]
+names(obs1) <- c("ID", "AGE", "COMP_Uber", "COMP_Lyft", "WEEK.TRIPS", "WEEK.TRIPS.RJ", "GENDER", "HISPANIC", "RACE", "IMMG", "EDU", "STDT", "EMPL", "HHSIZE", "CHILD", "POVERTY", "HHINCOME", "INDVINCOME", "SOURCE", "RESP", "DMS", "DMW", "RT", "LT", "PR", "MD", "rjrate")
+obs1$obs <- 1
+
+obs2 <- WideData[,c("ID", "AGE", "COMP_Uber", "COMP_Lyft", "WEEK.TRIPS", "WEEK.TRIPS.RJ", "GENDER", "HISPANIC", "RACE", "IMMG", "EDU", "STDT", "EMPL", "HHSIZE", "CHILD", "POVERTY", "HHINCOME", "INDVINCOME", "SOURCE", "RESP.2", "RESP.2.SURGE", "RESP.2.WTTIME", "RESP.2.RLTIME", "RESP.2.LTRIP", "RESP.2.PR", "RESP.2.SHARED", "rjrate")]
+names(obs2) <- c("ID", "AGE", "COMP_Uber", "COMP_Lyft", "WEEK.TRIPS", "WEEK.TRIPS.RJ", "GENDER", "HISPANIC", "RACE", "IMMG", "EDU", "STDT", "EMPL", "HHSIZE", "CHILD", "POVERTY", "HHINCOME", "INDVINCOME", "SOURCE", "RESP", "DMS", "DMW", "RT", "LT", "PR", "MD", "rjrate")
+obs2$obs <- 2
+
+obs3 <- WideData[,c("ID", "AGE", "COMP_Uber", "COMP_Lyft", "WEEK.TRIPS", "WEEK.TRIPS.RJ", "GENDER", "HISPANIC", "RACE", "IMMG", "EDU", "STDT", "EMPL", "HHSIZE", "CHILD", "POVERTY", "HHINCOME","INDVINCOME",  "SOURCE", "RESP.3", "RESP.3.SURGE", "RESP.3.WTTIME", "RESP.3.RLTIME", "RESP.3.LTRIP", "RESP.3.PR", "RESP.3.SHARED", "rjrate")]
+names(obs3) <- c("ID", "AGE", "COMP_Uber", "COMP_Lyft", "WEEK.TRIPS", "WEEK.TRIPS.RJ", "GENDER", "HISPANIC", "RACE", "IMMG", "EDU", "STDT", "EMPL", "HHSIZE", "CHILD", "POVERTY", "HHINCOME", "INDVINCOME", "SOURCE", "RESP", "DMS", "DMW", "RT", "LT", "PR", "MD", "rjrate")
+obs3$obs <- 3
+
+obs4 <- WideData[,c("ID", "AGE", "COMP_Uber", "COMP_Lyft", "WEEK.TRIPS", "WEEK.TRIPS.RJ", "GENDER", "HISPANIC", "RACE", "IMMG", "EDU", "STDT", "EMPL", "HHSIZE", "CHILD", "POVERTY", "HHINCOME","INDVINCOME",  "SOURCE", "RESP.4", "RESP.4.SURGE", "RESP.4.WTTIME", "RESP.4.RLTIME", "RESP.4.LTRIP", "RESP.4.PR", "RESP.4.SHARED", "rjrate")]
+names(obs4) <- c("ID", "AGE", "COMP_Uber", "COMP_Lyft", "WEEK.TRIPS", "WEEK.TRIPS.RJ", "GENDER", "HISPANIC", "RACE", "IMMG", "EDU", "STDT", "EMPL", "HHSIZE", "CHILD", "POVERTY", "HHINCOME", "INDVINCOME", "SOURCE", "RESP", "DMS", "DMW", "RT", "LT", "PR", "MD", "rjrate")
+obs4$obs <- 4
+
+obs5 <- WideData[,c("ID", "AGE", "COMP_Uber", "COMP_Lyft", "WEEK.TRIPS", "WEEK.TRIPS.RJ", "GENDER", "HISPANIC", "RACE", "IMMG", "EDU", "STDT", "EMPL", "HHSIZE", "CHILD", "POVERTY", "HHINCOME", "INDVINCOME", "SOURCE", "RESP.5", "RESP.5.SURGE", "RESP.5.WTTIME", "RESP.5.RLTIME", "RESP.5.LTRIP", "RESP.5.PR", "RESP.5.SHARED", "rjrate")]
+names(obs5) <- c("ID", "AGE", "COMP_Uber", "COMP_Lyft", "WEEK.TRIPS", "WEEK.TRIPS.RJ", "GENDER", "HISPANIC", "RACE", "IMMG", "EDU", "STDT", "EMPL", "HHSIZE", "CHILD", "POVERTY", "HHINCOME", "INDVINCOME", "SOURCE", "RESP", "DMS", "DMW", "RT", "LT", "PR", "MD", "rjrate")
+obs5$obs <- 5
+
+obs6 <- WideData[,c("ID", "AGE", "COMP_Uber", "COMP_Lyft", "WEEK.TRIPS", "WEEK.TRIPS.RJ", "GENDER", "HISPANIC", "RACE", "IMMG", "EDU", "STDT", "EMPL", "HHSIZE", "CHILD", "POVERTY", "HHINCOME", "INDVINCOME", "SOURCE", "RESP.6", "RESP.6.SURGE", "RESP.6.WTTIME", "RESP.6.RLTIME", "RESP.6.LTRIP", "RESP.6.PR", "RESP.6.SHARED", "rjrate")]
+names(obs6) <- c("ID", "AGE", "COMP_Uber", "COMP_Lyft", "WEEK.TRIPS", "WEEK.TRIPS.RJ", "GENDER", "HISPANIC", "RACE", "IMMG", "EDU", "STDT", "EMPL", "HHSIZE", "CHILD", "POVERTY", "HHINCOME", "INDVINCOME", "SOURCE", "RESP", "DMS", "DMW", "RT", "LT", "PR", "MD", "rjrate")
+obs6$obs <- 6
+
+obs <- rbind(obs1, obs2, obs3, obs4, obs5, obs6)
+
+exp_data <- obs %>% drop_na(obs, WEEK.TRIPS, WEEK.TRIPS.RJ, GENDER, EDU, RESP)
+
+rownames(exp_data) <- 1:nrow(exp_data)
+
+```
+
+## Variable manipulation
+```{R}
+exp_data$ID <- as.factor(exp_data$ID)
+exp_data$DMS <- as.numeric(exp_data$DMS)
+exp_data$MD <- as.factor(exp_data$MD)
+exp_data$LT <- as.factor(exp_data$LT)
+exp_data$AGE <- as.factor(exp_data$AGE)
+exp_data$EDU <- as.factor(exp_data$EDU)
+exp_data$EMPL <- as.factor(exp_data$EMPL)
+exp_data$GENDER <- as.factor(exp_data$GENDER)
+exp_data$COMP_Uber <- as.factor(exp_data$COMP_Uber)
+exp_data$COMP_Lyft <- as.factor(exp_data$COMP_Lyft)
+exp_data$POVERTY <- as.factor(exp_data$POVERTY)
+
+describe(exp_data)
+```
+
+## Descriptive analysis
+## Socio-demographics
+```{R}
+WideData <- WideData %>% mutate(COMP = ifelse(COMP_Uber == 1 & COMP_Lyft == 0, 0,
+                                             ifelse(COMP_Uber == 0 & COMP_Lyft == 1, 1, 2)))
+
+GENDERcount <- WideData %>% dplyr::count(WEEK.TRIPS)
+
+GENDERcount
+```
+
+## Description : Response to a request
+```{R}
+RaceCountG <- exp_data %>% dplyr::count(RESP)
+RaceCountG$fraction <- RaceCountG$n/sum(RaceCountG$n)
+RaceCountG
+
+s1 <-ggplot(data=RaceCountG, aes(x=RESP, y=fraction)) + theme_bw() + 
+  scale_fill_brewer(palette="Greys") + 
+  geom_bar(stat="identity", fill="#4b2e83", color="#4b2e83", alpha = 0.75, width=0.3) + theme(legend.position = "bottom") +
+  ylim(0,1) + 
+  xlim(-0.4,1.4) + 
+  ggtitle("B") + 
+  xlab("Response to a request - decline vs accept") + 
+  ylab("Percentage (%)") 
+s1
+```
+
+## Description : rejection rate
+```{R}
+widedata <- exp_data
+
+rjrateplot <- aggregate(widedata$rjrate, by=list(Category=widedata$ID), FUN=mean)
+
+rjrateplot <- na.omit(rjrateplot)
+
+rj0 <- filter(rjrateplot, x == 0)
+
+nrow(rj0)/nrow(rjrateplot)
+
+describe(rjrateplot$x)
+
+s2 <- ggplot(data=rjrateplot, aes(x)) + 
+  geom_density(fill="#4b2e83", color="#4b2e83", alpha=0.75) + 
+  geom_vline(xintercept = 5.91, color = "red", alpha = 0.75) + 
+  geom_text(aes(x=12, label="Mean = 5.91", y=0.075), colour="#4b2e83", alpha = 0.8) + 
+  ggtitle("A") + 
+  xlab("Self-reported rejection rate in past week (%)") + 
+  theme_bw()
+
+s2
+```
+
+## Multicollinearity
+```{R}
+cln <- lm(HHSIZE ~ DMS + DMW + RT + LT + PR + MD + POVERTY + 
+             GENDER + EDU + AGE + COMP_Uber + COMP_Lyft + rjrate + EMPL, data = exp_data)
+vif(cln)
+```
+
+## Logistic regression model
+## Dependent variable : response to trip request
+## Independent variables : Surge price (DMS), Average waiting time (DMW), Relocation time (RT), Long trip (LT), Passenger ratings (PR),
+## Shared or solo trip (MD), Household size (HHSIZE), Income (POVERTY), rejection rate (rjrate), Age (AGE), Employment status (EMPL),
+## Education level (EDU), Gender (GENDER), Uber (COMP_Uber), Lyft (COMP_Lyft)
+## Note : to compare with other models, here we use GAM to implement logistic regression. 
+```{R}
+gam_y_linear <- gam(RESP ~ DMS + 
+               DMW + 
+               RT + 
+               LT + 
+               PR +
+               MD + 
+               HHSIZE + 
+               LT*RT + 
+               POVERTY + 
+               rjrate  + 
+               AGE + 
+               EMPL + 
+               EDU + 
+               GENDER + 
+               COMP_Uber + 
+               COMP_Lyft, 
+               data = exp_data, 
+               family = "binomial")
+
+summary(gam_y_linear)
+
+AIC(gam_y_linear)
+
+```
+
+## Generalized additive model
+## Dependent variable : response to trip request
+## Independent variables : Surge price (DMS), Average waiting time (DMW), Relocation time (RT), Long trip (LT), Passenger ratings (PR),
+## Shared or solo trip (MD), Household size (HHSIZE), Income (POVERTY), rejection rate (rjrate), Age (AGE), Employment status (EMPL),
+## Education level (EDU), Gender (GENDER), Uber (COMP_Uber), Lyft (COMP_Lyft)
+```{R}
+gam_y_gam <- gam(RESP ~ 
+               DMS + 
+               DMW + 
+               s(RT, k = 5, by = LT) + 
+               LT + 
+               PR +
+               MD + 
+               HHSIZE + 
+               POVERTY + 
+               s(rjrate)  + 
+               AGE + 
+               EMPL + 
+               EDU + 
+               GENDER + 
+               COMP_Uber + 
+               COMP_Lyft, data = exp_data, family = "binomial")
+
+summary(gam_y_gam)
+
+gam.check(gam_y_gam)
+
+AIC(gam_y_gam)
+
+BIC(gam_y_gam)
+
+plot(gam_y_gam, pages = 1, scheme = 2, shade = TRUE)
+
+```
+
+## Generalized additive mixed model : used in the paper
+## Dependent variable : response to trip request
+## Independent variables : Surge price (DMS), Average waiting time (DMW), Relocation time (RT), Long trip (LT), Passenger ratings (PR),
+## Shared or solo trip (MD), Household size (HHSIZE), Income (POVERTY), rejection rate (rjrate), Age (AGE), Employment status (EMPL),
+## Education level (EDU), Gender (GENDER), Uber (COMP_Uber), Lyft (COMP_Lyft)
+```{R fig, fig.height = 4.5, fig.width = 4.5}
+gam_y_gamm <- gam(RESP ~ 
+               DMS + 
+               DMW + 
+               s(RT, k = 5, by = LT) + ## smooth term one
+               LT + 
+               PR +
+               MD + 
+               HHSIZE + 
+               POVERTY + 
+               s(rjrate)  + ## smooth term two
+               AGE + 
+               EMPL + 
+               EDU + 
+               GENDER + 
+               COMP_Uber + 
+               COMP_Lyft + 
+               s(ID,bs="re"), ## random effect
+               data = exp_data, 
+               family = "binomial")
+
+## model results
+summary(gam_y_gamm)
+
+## variance component
+gam.vcomp(gam_y_gamm, conf.lev=.95)
+
+## model checking
+gam.check(gam_y_gamm, rep = 500)
+
+## smooth term plots
+plot(gam_y_gamm, pages = 1, scheme = 2, shade = TRUE)
+
+## final loglikelihood
+logLik(gam_y_gamm)
+
+## AIC and BIC
+AIC(gam_y_gamm)
+BIC(gam_y_gamm)
+
+```
+
+## Prediction : elasticity
+```{R  fig, fig.height = 2, fig.width = 4}
+library(mgcv)
+
+exp_data_test <- exp_data
+exp_data_test$RT <- exp_data$RT + 1
+
+pred_linear <- predict.gam(gam_y_gamm, exp_data)
+
+pred_linear_test <- predict.gam(gam_y_gamm, exp_data_test)
+
+pred <-as.data.frame(cbind(exp_data$RT, exp_data$LT, pred_linear, pred_linear_test))
+
+pred <- na.omit(pred)
+
+pred$diff <- (pred$pred_linear - pred$pred_linear_test)/0.082
+
+pred_long <- filter(pred, V2 == 2)
+pred_short <- filter(pred, V2 == 1)
+
+predplot_long <- aggregate(pred_long$diff, by=list(Category=pred_long$V1), FUN=mean)
+predplot_short <- aggregate(pred_short$diff, by=list(Category=pred_short$V1), FUN=mean)
+
+p1 <- ggplot(data = predplot_short, aes(Category, x)) + geom_point(colour="#4b2e83") + theme_bw() + ylim(-0.5, 4) + ggtitle("Short trip") + xlab("Pick-up time (min)") + ylab("WTA ($)")
+
+p2 <- ggplot(data = predplot_long, aes(Category, x)) + geom_point(colour="#4b2e83") + theme_bw() + ylim(-0.5, 4) + ggtitle("Long trip") + xlab("Pick-up time (min)") + ylab("WTA ($)")
+
+grid.arrange(p1, p2, nrow =1)
+```
+
